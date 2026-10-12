@@ -1,0 +1,538 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile | SmartLib</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #101511;
+    --panel: #171e19;
+    --panel-light: #1d2720;
+    --border: #303b31;
+    --lime: #c6f36b;
+    --text: #f1f2e9;
+    --muted: #9ba69a;
+    --gold: #d9b879;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.navbar {
+    min-height: 76px;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    background: #101511;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--lime);
+}
+
+.logo small {
+    display: block;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    margin-top: 3px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 22px;
+}
+
+.nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--lime);
+}
+
+.nav-links .logout {
+    color: #ff827b;
+    border: 1px solid #593632;
+    padding: 9px 14px;
+    border-radius: 7px;
+}
+
+main {
+    max-width: 1250px;
+    margin: auto;
+    padding: 45px 7% 70px;
+}
+
+.eyebrow {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 13px;
+}
+
+.page-heading {
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(34px, 5vw, 46px);
+    font-weight: 600;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 27px;
+}
+
+.profile-card {
+    text-align: center;
+}
+
+.avatar {
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, #35482b, #1b281c);
+    border: 1px solid #64794b;
+    color: var(--lime);
+    font-size: 43px;
+}
+
+.profile-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 25px;
+    margin-bottom: 8px;
+    overflow-wrap: anywhere;
+}
+
+.role {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 18px;
+}
+
+.member-badge {
+    display: inline-block;
+    padding: 7px 12px;
+    border: 1px solid #435536;
+    background: #26351f;
+    color: var(--lime);
+    border-radius: 30px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+}
+
+.profile-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 25px 0 18px;
+}
+
+.profile-note {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.details-card h2,
+.activity-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 23px;
+    margin-bottom: 22px;
+}
+
+.section-label {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.detail-box {
+    min-width: 0;
+    padding: 17px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+}
+
+.detail-box label {
+    display: block;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    margin-bottom: 9px;
+    text-transform: uppercase;
+}
+
+.detail-box strong {
+    display: block;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.activity-section {
+    margin-top: 30px;
+}
+
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.activity-card {
+    padding: 21px;
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+}
+
+.activity-icon {
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+.activity-card h3 {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 31px;
+    margin-bottom: 7px;
+}
+
+.activity-card p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.activity-footnote {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 15px;
+    line-height: 1.7;
+}
+
+.quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.quick-links a {
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 7px;
+    color: var(--muted);
+    font-size: 12px;
+    transition: 0.2s;
+}
+
+.quick-links a:hover {
+    border-color: var(--lime);
+    color: var(--lime);
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+footer span {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+}
+
+@media (max-width: 900px) {
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-card {
+        max-width: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 16px 5%;
+    }
+
+    .nav-links {
+        gap: 13px;
+    }
+
+    .nav-links a {
+        font-size: 12px;
+    }
+
+    main {
+        padding: 35px 5% 50px;
+    }
+
+    .panel {
+        padding: 21px;
+    }
+
+    .details-grid,
+    .activity-grid {
+        grid-template-columns: 1fr;
+    }
+
+    footer {
+        padding: 22px 5%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a class="logo" href="dashboard.html">
+        Smart<span>Lib</span>
+        <small>YOUR DIGITAL LIBRARY</small>
+    </a>
+
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="books.html">Explore Books</a>
+        <a href="mybooks.html">My Shelf</a>
+        <a href="reservation.html">Reservations</a>
+        <a href="smartboard.html">Smartboard</a>
+        <a href="profile.html" class="active">Profile</a>
+        <a href="index.html" class="logout">Log out ↗</a>
+    </div>
+</nav>
+
+<main>
+    <div class="page-heading">
+        <p class="eyebrow">Account / Member details</p>
+        <h1>My Profile<span style="color:var(--lime)">.</span></h1>
+        <p class="subtitle">
+            Your membership information and library activity,
+            all in one place.
+        </p>
+    </div>
+
+    <section class="profile-layout">
+
+        <aside class="panel profile-card">
+            <div class="avatar">👤</div>
+
+            <h2 id="profileName">Chandu A</h2>
+            <p class="role">Student Member</p>
+
+            <span class="member-badge">● ACTIVE MEMBER</span>
+
+            <hr class="profile-divider">
+
+            <p class="profile-note">
+                Welcome to SmartLib.<br>
+                Keep exploring, reading and learning.
+            </p>
+
+            <div class="quick-links">
+                <a href="books.html">Explore Books ↗</a>
+                <a href="mybooks.html">My Shelf ↗</a>
+            </div>
+        </aside>
+
+        <div>
+            <section class="panel details-card">
+                <p class="section-label">01 / MEMBER INFORMATION</p>
+                <h2>Personal Information</h2>
+
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <label>Full Name</label>
+                        <strong>Chandu A</strong>
+                    </div>
+
+                    <div class="detail-box">
+                        <label>Student ID</label>
+                        <strong>BCA2026</strong>
+                    </div>
+
+                    <div class="detail-box">
+                        <label>Course</label>
+                        <strong>Bachelor of Computer Applications</strong>
+                    </div>
+
+                    <div class="detail-box">
+                        <label>Department</label>
+                        <strong>Computer Applications</strong>
+                    </div>
+
+                    <div class="detail-box">
+                        <label>Email</label>
+                        <strong id="profileEmail">student@smartlib.com</strong>
+                    </div>
+
+                    <div class="detail-box">
+                        <label>Membership Status</label>
+                        <strong style="color:var(--lime)">Active</strong>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel activity-section">
+                <p class="section-label">02 / YOUR READING OVERVIEW</p>
+                <h2>Library Activity</h2>
+
+                <div class="activity-grid">
+                    <div class="activity-card">
+                        <div class="activity-icon">📚</div>
+                        <h3 id="borrowedCount">0</h3>
+                        <p>Books on My Shelf</p>
+                    </div>
+
+                    <div class="activity-card">
+                        <div class="activity-icon">🔖</div>
+                        <h3 id="reservationCount">0</h3>
+                        <p>Reservations Recorded</p>
+                    </div>
+                </div>
+
+                <p class="activity-footnote">
+                    Counts are based on data stored in this browser.
+                    This demo does not connect to a real library database.
+                </p>
+            </section>
+        </div>
+
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 SmartLib · Smart Library Management System</p>
+    <span>READ. LEARN. GROW.</span>
+</footer>
+
+<script>
+function readArrayFromStorage(key) {
+    try {
+        const value = JSON.parse(localStorage.getItem(key) || "[]");
+        return Array.isArray(value) ? value : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function updateActivity() {
+    const borrowedBooks = readArrayFromStorage("borrowedBooks");
+    const reservations = readArrayFromStorage("reservations");
+
+    document.getElementById("borrowedCount").textContent =
+        new Set(borrowedBooks).size;
+
+    document.getElementById("reservationCount").textContent =
+        reservations.length;
+
+    // Use the remembered email from the demo login, if available.
+    const savedEmail = localStorage.getItem("smartlibUserEmail");
+
+    if (savedEmail && savedEmail.trim()) {
+        document.getElementById("profileEmail").textContent = savedEmail;
+    }
+}
+
+updateActivity();
+
+window.addEventListener("storage", function(event) {
+    if (
+        event.key === "borrowedBooks" ||
+        event.key === "reservations" ||
+        event.key === "smartlibUserEmail"
+    ) {
+        updateActivity();
+    }
+});
+</script>
+
+</body>
+</html>

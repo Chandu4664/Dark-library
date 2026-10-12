@@ -1,0 +1,631 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Books | SmartLib</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #101511;
+    --panel: #171e19;
+    --panel-light: #1d2720;
+    --border: #303b31;
+    --lime: #c6f36b;
+    --text: #f1f2e9;
+    --muted: #9ba69a;
+    --gold: #d9b879;
+    --danger: #ff827b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.navbar {
+    min-height: 76px;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    background: rgba(16, 21, 17, 0.96);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--lime);
+}
+
+.logo small {
+    display: block;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    margin-top: 3px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 23px;
+}
+
+.nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--lime);
+}
+
+.nav-links .logout {
+    color: var(--danger);
+    border: 1px solid #593632;
+    padding: 9px 14px;
+    border-radius: 7px;
+}
+
+main {
+    max-width: 1250px;
+    margin: auto;
+    padding: 48px 7% 70px;
+}
+
+.eyebrow {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 13px;
+}
+
+.page-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 22px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(34px, 5vw, 48px);
+    font-weight: 600;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.shelf-count {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 22px;
+    min-width: 130px;
+}
+
+.shelf-count strong {
+    display: block;
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 27px;
+}
+
+.shelf-count span {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 17px 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+.toolbar-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.search-box {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 11px 13px;
+    font: inherit;
+    font-size: 13px;
+    width: min(100%, 290px);
+    outline: none;
+}
+
+.search-box:focus {
+    border-color: var(--lime);
+}
+
+.books-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.book-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 23px;
+    min-width: 0;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.book-card:hover {
+    transform: translateY(-4px);
+    border-color: #64794b;
+}
+
+.book-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.book-icon {
+    width: 64px;
+    height: 78px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, #28392a, #1b261d);
+    border: 1px solid #43533d;
+    border-radius: 8px 12px 12px 8px;
+    font-size: 31px;
+}
+
+.status {
+    display: inline-block;
+    background: #26351f;
+    color: var(--lime);
+    border: 1px solid #435536;
+    border-radius: 30px;
+    padding: 6px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.book-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    line-height: 1.35;
+    margin-bottom: 7px;
+    overflow-wrap: anywhere;
+}
+
+.author {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.due-date {
+    padding: 13px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-top: auto;
+    margin-bottom: 15px;
+}
+
+.due-date span {
+    display: block;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.due-date strong {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.return-btn {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid #653a36;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.return-btn:hover {
+    background: #38211f;
+    border-color: var(--danger);
+}
+
+.empty-message {
+    grid-column: 1 / -1;
+    padding: 65px 22px;
+    text-align: center;
+    background: var(--panel);
+    border: 1px dashed #465344;
+    border-radius: 15px;
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 18px;
+}
+
+.empty-message h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.empty-message p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+    margin-bottom: 23px;
+}
+
+.primary-btn {
+    display: inline-block;
+    background: var(--lime);
+    color: #172013;
+    padding: 12px 19px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: background 0.2s;
+}
+
+.primary-btn:hover {
+    background: #d7ff8a;
+}
+
+.no-results {
+    grid-column: 1 / -1;
+    color: var(--muted);
+    text-align: center;
+    padding: 35px 15px;
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+footer span {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+}
+
+@media (max-width: 900px) {
+    .books-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 16px 5%;
+    }
+
+    .nav-links {
+        gap: 13px;
+    }
+
+    .nav-links a {
+        font-size: 12px;
+    }
+
+    main {
+        padding: 35px 5% 50px;
+    }
+
+    .books-container {
+        grid-template-columns: 1fr;
+    }
+
+    .shelf-count {
+        width: 100%;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a class="logo" href="dashboard.html">
+        Smart<span>Lib</span>
+        <small>YOUR DIGITAL LIBRARY</small>
+    </a>
+
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="books.html">Explore Books</a>
+        <a href="mybooks.html" class="active">My Shelf</a>
+        <a href="reservation.html">Reservations</a>
+        <a href="smartboard.html">Smartboard</a>
+        <a href="Profile.html">Profile</a>
+        <a href="index.html" class="logout">Log out ↗</a>
+    </div>
+</nav>
+
+<main>
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">Personal collection / 01</p>
+            <h1>My Books<span style="color:var(--lime)">.</span></h1>
+            <p class="subtitle">
+                Your reading shelf, all in one place.<br>
+                Keep track of the books you've added to your collection.
+            </p>
+        </div>
+
+        <div class="shelf-count">
+            <strong id="bookCount">0</strong>
+            <span>BOOKS ON YOUR SHELF</span>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <span class="toolbar-label">YOUR PERSONAL COLLECTION</span>
+        <input
+            type="search"
+            id="bookSearch"
+            class="search-box"
+            placeholder="Search your books..."
+            aria-label="Search your books"
+        >
+    </div>
+
+    <section class="books-container" id="booksContainer"></section>
+</main>
+
+<footer>
+    <p>© 2026 SmartLib · Smart Library Management System</p>
+    <span>READ. LEARN. GROW.</span>
+</footer>
+
+<script>
+const bookDetails = {
+    "Atomic Habits": {
+        author: "James Clear",
+        dueDate: "15 October 2026",
+        icon: "📘"
+    },
+    "Clean Code": {
+        author: "Robert C. Martin",
+        dueDate: "18 October 2026",
+        icon: "📗"
+    },
+    "The Alchemist": {
+        author: "Paulo Coelho",
+        dueDate: "20 October 2026",
+        icon: "📕"
+    },
+    "Python Crash Course": {
+        author: "Eric Matthes",
+        dueDate: "22 October 2026",
+        icon: "📙"
+    },
+    "Think and Grow Rich": {
+        author: "Napoleon Hill",
+        dueDate: "24 October 2026",
+        icon: "📔"
+    },
+    "The Power of Now": {
+        author: "Eckhart Tolle",
+        dueDate: "26 October 2026",
+        icon: "📓"
+    }
+};
+
+function getBorrowedBooks() {
+    try {
+        const stored = JSON.parse(
+            localStorage.getItem("borrowedBooks") || "[]"
+        );
+
+        return Array.isArray(stored)
+            ? [...new Set(stored.filter(book => typeof book === "string"))]
+            : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function displayBooks() {
+    const container = document.getElementById("booksContainer");
+    const searchValue = document.getElementById("bookSearch")
+        .value.trim().toLowerCase();
+
+    const borrowedBooks = getBorrowedBooks();
+
+    document.getElementById("bookCount").textContent =
+        borrowedBooks.length;
+
+    container.innerHTML = "";
+
+    if (borrowedBooks.length === 0) {
+        container.innerHTML = `
+            <div class="empty-message">
+                <div class="empty-icon">📚</div>
+                <h2>Your shelf is waiting.</h2>
+                <p>
+                    You haven't added any books yet.<br>
+                    Explore the library and choose your next read.
+                </p>
+                <a href="books.html" class="primary-btn">Explore the Library ↗</a>
+            </div>
+        `;
+        return;
+    }
+
+    const filteredBooks = borrowedBooks.filter(bookName =>
+        bookName.toLowerCase().includes(searchValue)
+    );
+
+    if (filteredBooks.length === 0) {
+        container.innerHTML = `
+            <div class="no-results">
+                No books match "${escapeHTML(searchValue)}".
+                Try another title.
+            </div>
+        `;
+        return;
+    }
+
+    filteredBooks.forEach(bookName => {
+        const book = bookDetails[bookName] || {
+            author: "Author details unavailable",
+            dueDate: "Please check with the library",
+            icon: "📖"
+        };
+
+        const card = document.createElement("article");
+        card.className = "book-card";
+
+        card.innerHTML = `
+            <div class="book-top">
+                <div class="book-icon">${book.icon}</div>
+                <span class="status">● ON YOUR SHELF</span>
+            </div>
+
+            <h2>${escapeHTML(bookName)}</h2>
+            <p class="author">By ${escapeHTML(book.author)}</p>
+
+            <div class="due-date">
+                <span>Due date</span>
+                <strong>${escapeHTML(book.dueDate)}</strong>
+            </div>
+
+            <button class="return-btn" type="button">
+                Return Book ↗
+            </button>
+        `;
+
+        card.querySelector(".return-btn").addEventListener("click", () => {
+            returnBook(bookName);
+        });
+
+        container.appendChild(card);
+    });
+}
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+function returnBook(bookName) {
+    const confirmed = confirm(
+        `Are you sure you want to return "${bookName}"?`
+    );
+
+    if (!confirmed) return;
+
+    const updatedBooks = getBorrowedBooks().filter(
+        book => book !== bookName
+    );
+
+    localStorage.setItem(
+        "borrowedBooks",
+        JSON.stringify(updatedBooks)
+    );
+
+    displayBooks();
+}
+
+document.getElementById("bookSearch").addEventListener("input", displayBooks);
+
+window.addEventListener("storage", event => {
+    if (event.key === "borrowedBooks") {
+        displayBooks();
+    }
+});
+
+displayBooks();
+</script>
+
+</body>
+</html>

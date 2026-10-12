@@ -1,0 +1,1043 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101511">
+<title>Smartboard Scanner | SmartLib</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #101511;
+    --panel: #171e19;
+    --panel-light: #1d2720;
+    --border: #303b31;
+    --lime: #c6f36b;
+    --text: #f1f2e9;
+    --muted: #9ba69a;
+    --gold: #d9b879;
+    --green: #35482b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.navbar {
+    min-height: 76px;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    background: #101511;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--lime);
+}
+
+.logo small {
+    display: block;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    margin-top: 3px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    transition: color .2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--lime);
+}
+
+.nav-links .logout {
+    color: #ff827b;
+    border: 1px solid #593632;
+    padding: 9px 14px;
+    border-radius: 7px;
+}
+
+main {
+    max-width: 1250px;
+    margin: auto;
+    padding: 45px 7% 60px;
+}
+
+.eyebrow {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 13px;
+}
+
+.page-heading {
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(34px, 5vw, 46px);
+    font-weight: 600;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+}
+
+h2, h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+h2 {
+    font-size: 23px;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.scanner-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.panel {
+    min-width: 0;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 25px;
+}
+
+.section-label {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 17px;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.small {
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.scanner {
+    margin-top: 18px;
+    padding: 15px;
+    text-align: center;
+    border: 1px dashed #435536;
+    border-radius: 12px;
+    background: var(--bg);
+}
+
+.scanner video,
+.scanner img {
+    display: block;
+    width: 100%;
+    max-height: 380px;
+    object-fit: contain;
+    margin: 0 auto;
+    border-radius: 8px;
+    background: #080b09;
+}
+
+.placeholder {
+    padding: 38px 10px;
+}
+
+.placeholder .camera-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 15px 0;
+}
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 14px;
+    border-radius: 7px;
+    border: 1px solid var(--lime);
+    background: var(--lime);
+    color: #101511;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.btn.secondary {
+    background: #26351f;
+    color: var(--lime);
+    border-color: #435536;
+}
+
+.btn.ghost {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--border);
+}
+
+.btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.field {
+    margin: 18px 0;
+}
+
+.field label {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 9px;
+}
+
+.field input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    outline: none;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.field input:focus {
+    border-color: var(--lime);
+}
+
+input[type="file"] {
+    font-size: 12px;
+}
+
+input[type="file"]::file-selector-button {
+    padding: 8px;
+    margin-right: 10px;
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--lime);
+    cursor: pointer;
+}
+
+.status {
+    padding: 12px 14px;
+    margin: 14px 0;
+    border: 1px solid #435536;
+    border-radius: 8px;
+    background: #1d2a1c;
+    color: var(--lime);
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.status.error {
+    background: #2d1c1b;
+    color: #ffaaa2;
+    border-color: #593632;
+}
+
+.status.info {
+    background: #1a252b;
+    color: #a9d7ed;
+    border-color: #314c58;
+}
+
+.progress {
+    height: 7px;
+    background: #303b31;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+#progressBar {
+    height: 100%;
+    width: 0;
+    background: var(--lime);
+    transition: width .2s;
+}
+
+.result-card {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 15px;
+    margin: 13px 0;
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow-wrap: anywhere;
+}
+
+.book-icon {
+    width: 52px;
+    min-width: 52px;
+    height: 68px;
+    display: grid;
+    place-items: center;
+    background: #26351f;
+    border: 1px solid #435536;
+    border-radius: 7px;
+    font-size: 25px;
+}
+
+.result-card h3 {
+    color: var(--text);
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 8px;
+    margin-bottom: 8px;
+    border: 1px solid #435536;
+    border-radius: 5px;
+    background: #26351f;
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+}
+
+.tips {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.tip {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--panel);
+}
+
+.tip h3 {
+    color: var(--gold);
+    font-size: 17px;
+    margin-bottom: 10px;
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+footer span {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+}
+
+@media(max-width: 900px) {
+    .scanner-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 600px) {
+    .navbar {
+        padding: 16px 5%;
+    }
+
+    .nav-links {
+        gap: 13px;
+    }
+
+    .nav-links a {
+        font-size: 12px;
+    }
+
+    main {
+        padding: 35px 5% 50px;
+    }
+
+    .panel {
+        padding: 19px;
+    }
+
+    .tips {
+        grid-template-columns: 1fr;
+    }
+
+    footer {
+        padding: 22px 5%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a class="logo" href="dashboard.html">
+        Smart<span>Lib</span>
+        <small>YOUR DIGITAL LIBRARY</small>
+    </a>
+
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="books.html">Explore Books</a>
+        <a href="mybooks.html">My Shelf</a>
+        <a href="reservation.html">Reservations</a>
+        <a href="smartboard.html" class="active">Smartboard</a>
+        <a href="profile.html">Profile</a>
+        <a href="index.html" class="logout">Log out ↗</a>
+    </div>
+</nav>
+
+<main>
+    <div class="page-heading">
+        <p class="eyebrow">Smartboard / Book Recognition</p>
+        <h1>Smartboard Scanner<span style="color:var(--lime)">.</span></h1>
+        <p class="subtitle">
+            Capture a book cover or upload an image. SmartLib reads the visible
+            text and searches its sample catalogue and online book listings.
+        </p>
+    </div>
+
+    <section class="scanner-layout">
+
+        <div class="panel">
+            <p class="section-label">01 / CAPTURE BOOK COVER</p>
+            <h2>Scan a Book</h2>
+            <p class="small muted">
+                Use good lighting and keep the book title clear and in focus.
+            </p>
+
+            <div class="scanner">
+                <video id="video" autoplay playsinline muted class="hidden"></video>
+                <img id="preview" class="hidden" alt="Selected book cover preview">
+
+                <div id="placeholder" class="placeholder">
+                    <div class="camera-icon">📚</div>
+                    <h3>Ready to discover?</h3>
+                    <p class="small muted">Start the camera or upload a book cover.</p>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn" id="startCamera">Start Camera</button>
+                <button class="btn" id="capture" disabled>Capture & Identify</button>
+                <button class="btn secondary" id="switchCamera" disabled>Switch Camera</button>
+            </div>
+
+            <div class="field">
+                <label for="imageUpload">Or upload a book cover image</label>
+                <input id="imageUpload" type="file" accept="image/*">
+            </div>
+
+            <button class="btn ghost" id="clear">Reset Scanner</button>
+
+            <div id="cameraStatus" class="status" role="status" aria-live="polite">
+                Camera has not started. You can upload a photo instead.
+            </div>
+
+            <p class="small muted">
+                Camera access requires HTTPS or localhost. OCR runs in your browser.
+                Online suggestions require internet access.
+            </p>
+        </div>
+
+        <div class="panel">
+            <p class="section-label">02 / BOOK IDENTIFICATION</p>
+            <h2>Recognition Results</h2>
+
+            <div id="scanStatus" class="status" role="status" aria-live="polite">
+                Ready to scan a book cover.
+            </div>
+
+            <div id="progressWrap" class="hidden">
+                <p id="progressLabel" class="small muted">Preparing image...</p>
+                <div class="progress">
+                    <div id="progressBar"></div>
+                </div>
+            </div>
+
+            <div id="result">
+                <div class="result-card">
+                    <div class="book-icon">📖</div>
+                    <div>
+                        <h3>Waiting for a cover</h3>
+                        <p class="small muted">Book details will appear here.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="manualSearch">Search manually by title or author</label>
+                <input id="manualSearch" type="text"
+                       placeholder="e.g. Atomic Habits or James Clear">
+
+                <div class="actions">
+                    <button class="btn secondary" id="searchManual">
+                        Search Catalogue
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="tips">
+        <div class="tip">
+            <h3>☀️ Good Lighting</h3>
+            <p class="small muted">Avoid shadows and reflections on the book cover.</p>
+        </div>
+
+        <div class="tip">
+            <h3>📐 Clear Text</h3>
+            <p class="small muted">Keep the title and author sharp and readable.</p>
+        </div>
+
+        <div class="tip">
+            <h3>🔐 Privacy</h3>
+            <p class="small muted">The captured image is processed in your browser.</p>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 SmartLib · Smart Library Management System</p>
+    <span>READ. LEARN. GROW.</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<script>
+const catalog = [
+    {title:'Atomic Habits', author:'James Clear', category:'Self Development', isbn:'9780735211292'},
+    {title:'Clean Code', author:'Robert C. Martin', category:'Programming', isbn:'9780132350884'},
+    {title:'The Alchemist', author:'Paulo Coelho', category:'Fiction', isbn:'9780061122415'},
+    {title:'Python Crash Course', author:'Eric Matthes', category:'Programming', isbn:'9781718502703'},
+    {title:'Think and Grow Rich', author:'Napoleon Hill', category:'Business', isbn:'9781585424337'},
+    {title:'The Power of Now', author:'Eckhart Tolle', category:'Self Development', isbn:'9781577314806'},
+    {title:'A Brief History of Time', author:'Stephen Hawking', category:'Science', isbn:'9780553380163'},
+    {title:'The Design of Everyday Things', author:'Don Norman', category:'Design', isbn:'9780465050659'}
+];
+
+const $ = id => document.getElementById(id);
+
+let stream = null;
+let facing = 'environment';
+let scanToken = 0;
+
+function setStatus(id, message, type = '') {
+    const element = $(id);
+    element.textContent = message;
+    element.className = 'status' + (type ? ' ' + type : '');
+}
+
+function stopCamera() {
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+    }
+
+    $('video').srcObject = null;
+    $('video').classList.add('hidden');
+    $('capture').disabled = true;
+    $('switchCamera').disabled = true;
+}
+
+async function startCamera() {
+    stopCamera();
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setStatus(
+            'cameraStatus',
+            'Camera is unavailable. Open the site using HTTPS or localhost, or upload a photo.',
+            'error'
+        );
+        return;
+    }
+
+    setStatus('cameraStatus', 'Requesting camera permission...', 'info');
+
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: {
+                facingMode: {ideal: facing},
+                width: {ideal: 1280},
+                height: {ideal: 720}
+            }
+        });
+
+        $('video').srcObject = stream;
+        $('video').classList.remove('hidden');
+        $('preview').classList.add('hidden');
+        $('placeholder').classList.add('hidden');
+
+        await $('video').play();
+
+        $('capture').disabled = false;
+        $('switchCamera').disabled = false;
+
+        setStatus('cameraStatus', 'Camera ready. Frame the cover and capture it.');
+    } catch (error) {
+        let message = 'Could not start the camera. Try uploading an image instead.';
+
+        if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+            message = 'Camera permission denied. Allow camera access in browser site settings, then reload.';
+        } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+            message = 'No camera found. Connect or enable a camera, or upload a photo.';
+        } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+            message = 'The camera may be in use by another app. Close other camera apps and retry.';
+        } else if (
+            location.protocol !== 'https:' &&
+            location.hostname !== 'localhost' &&
+            location.hostname !== '127.0.0.1'
+        ) {
+            message = 'Camera access requires HTTPS or localhost. Use your HTTPS website or upload a photo.';
+        }
+
+        setStatus('cameraStatus', message, 'error');
+    }
+}
+
+function normalize(text) {
+    return text.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+function findLocal(text) {
+    const normalized = normalize(text);
+    let best = null;
+    let bestScore = 0;
+
+    for (const book of catalog) {
+        const title = normalize(book.title);
+        const author = normalize(book.author);
+        let score = 0;
+
+        if (normalized.includes(title)) score += 100;
+        if (normalized.includes(author)) score += 45;
+
+        const words = title.split(' ').filter(word => word.length > 2);
+        const hits = words.filter(word => normalized.includes(word)).length;
+        score += hits / Math.max(1, words.length) * 55;
+
+        if (score > bestScore) {
+            bestScore = score;
+            best = book;
+        }
+    }
+
+    return bestScore >= 35 ? best : null;
+}
+
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
+}
+
+function bookCard(book, source = 'SmartLib Catalogue') {
+    const author = book.author_name?.join(', ') || book.author || 'Author not listed';
+    const query = encodeURIComponent((book.title || '') + ' ' + author);
+
+    return `
+        <div class="result-card">
+            <div class="book-icon">📘</div>
+            <div>
+                <span class="badge">${escapeHtml(source)}</span>
+                <h3>${escapeHtml(book.title || 'Untitled')}</h3>
+                <p class="small muted">${escapeHtml(author)}</p>
+                ${book.category ? `<span class="badge">${escapeHtml(book.category)}</span>` : ''}
+                ${book.isbn ? `<p class="small muted">ISBN: ${escapeHtml(book.isbn)}</p>` : ''}
+                ${book.first_publish_year ? `<p class="small muted">First published: ${escapeHtml(book.first_publish_year)}</p>` : ''}
+                <div class="actions">
+                    <a class="btn secondary" target="_blank" rel="noopener"
+                       href="https://openlibrary.org/search?q=${query}">View Online ↗</a>
+                    <a class="btn ghost" href="books.html">SmartLib Books</a>
+                </div>
+            </div>
+        </div>`;
+}
+
+async function onlineSearch(query) {
+    if (!query.trim()) return [];
+
+    try {
+        const response = await fetch(
+            'https://openlibrary.org/search.json?q=' +
+            encodeURIComponent(query) + '&limit=5'
+        );
+
+        if (!response.ok) throw new Error('Online search unavailable');
+
+        const data = await response.json();
+
+        return (data.docs || []).slice(0, 5).map(book => ({
+            title: book.title,
+            author_name: book.author_name,
+            first_publish_year: book.first_publish_year,
+            isbn: book.isbn?.[0]
+        }));
+    } catch (error) {
+        return [];
+    }
+}
+
+function bestQuery(text) {
+    return text.split(/\n+/)
+        .map(line => line.replace(/\s+/g, ' ').trim())
+        .filter(line => line.length > 2)
+        .slice(0, 4)
+        .join(' ');
+}
+
+function preprocess(dataUrl) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+
+        image.onload = () => {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            const scale = Math.min(2, 1600 / Math.max(image.width, image.height));
+
+            canvas.width = Math.max(1, Math.round(image.width * scale));
+            canvas.height = Math.max(1, Math.round(image.height * scale));
+
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+            const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < pixels.data.length; i += 4) {
+                const gray =
+                    0.299 * pixels.data[i] +
+                    0.587 * pixels.data[i + 1] +
+                    0.114 * pixels.data[i + 2];
+
+                const contrast = Math.max(0, Math.min(255, (gray - 128) * 1.25 + 128));
+
+                pixels.data[i] = contrast;
+                pixels.data[i + 1] = contrast;
+                pixels.data[i + 2] = contrast;
+            }
+
+            context.putImageData(pixels, 0, 0);
+            resolve(canvas);
+        };
+
+        image.onerror = () => reject(new Error('Could not load the selected image.'));
+        image.src = dataUrl;
+    });
+}
+
+async function runRecognition(dataUrl) {
+    const token = ++scanToken;
+
+    $('result').innerHTML = '';
+    $('progressWrap').classList.remove('hidden');
+    $('progressBar').style.width = '5%';
+    $('progressLabel').textContent = 'Preparing image...';
+
+    setStatus('scanStatus', 'Reading text from the book cover...', 'info');
+
+    try {
+        if (!window.Tesseract) {
+            throw new Error('OCR library failed to load. Check your internet connection.');
+        }
+
+        const canvas = await preprocess(dataUrl);
+        if (token !== scanToken) return;
+
+        const worker = await Tesseract.createWorker('eng', 1, {
+            logger: message => {
+                if (token !== scanToken) return;
+
+                if (message.status) {
+                    $('progressLabel').textContent =
+                        message.status === 'recognizing text'
+                        ? 'Recognizing book text...'
+                        : message.status + '...';
+                }
+
+                if (message.progress != null) {
+                    $('progressBar').style.width =
+                        Math.max(5, Math.round(message.progress * 100)) + '%';
+                }
+            }
+        });
+
+        let text = '';
+
+        try {
+            const result = await worker.recognize(canvas);
+            text = result.data.text || '';
+        } finally {
+            await worker.terminate();
+        }
+
+        if (token !== scanToken) return;
+
+        const local = findLocal(text);
+
+        if (local) {
+            $('result').innerHTML =
+                bookCard(local, 'Catalogue Match') +
+                '<div class="status">Possible match found. Verify the details against the actual cover.</div>';
+
+            setStatus('scanStatus', 'A possible local catalogue match was found.');
+            return;
+        }
+
+        if (text.trim()) {
+            $('result').innerHTML = `
+                <div class="result-card">
+                    <div class="book-icon">🔤</div>
+                    <div>
+                        <h3>Text Detected</h3>
+                        <p class="small muted">${escapeHtml(text.trim().slice(0, 500))}</p>
+                    </div>
+                </div>`;
+        }
+
+        const query = bestQuery(text);
+
+        setStatus(
+            'scanStatus',
+            text.trim()
+                ? 'No local match found. Searching online...'
+                : 'No readable title detected. Try a clearer photo or manual search.',
+            'info'
+        );
+
+        const online = await onlineSearch(query);
+        if (token !== scanToken) return;
+
+        if (online.length) {
+            $('result').innerHTML += online
+                .map(book => bookCard(book, 'Online Suggestion'))
+                .join('');
+
+            setStatus('scanStatus', 'Online suggestions found. Verify the book details.');
+        } else {
+            $('result').innerHTML +=
+                '<div class="status">No suggestions found. Try searching by title or author below.</div>';
+        }
+    } catch (error) {
+        if (token === scanToken) {
+            $('result').innerHTML =
+                '<div class="status error">Could not process this image. Try a clear JPG or PNG image.</div>';
+
+            setStatus('scanStatus', error.message || 'Recognition failed.', 'error');
+        }
+    } finally {
+        if (token === scanToken) {
+            $('progressWrap').classList.add('hidden');
+            $('progressBar').style.width = '0';
+        }
+    }
+}
+
+function showImage(dataUrl) {
+    $('preview').src = dataUrl;
+    $('preview').classList.remove('hidden');
+    $('video').classList.add('hidden');
+    $('placeholder').classList.add('hidden');
+
+    stopCamera();
+
+    setStatus('cameraStatus', 'Image loaded. Recognition started.');
+    runRecognition(dataUrl);
+}
+
+$('startCamera').addEventListener('click', startCamera);
+
+$('capture').addEventListener('click', () => {
+    const video = $('video');
+
+    if (!stream || !video.videoWidth) {
+        setStatus('cameraStatus', 'Wait until the camera preview appears.', 'error');
+        return;
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    canvas.getContext('2d').drawImage(video, 0, 0);
+
+    showImage(canvas.toDataURL('image/jpeg', 0.94));
+});
+
+$('switchCamera').addEventListener('click', () => {
+    facing = facing === 'environment' ? 'user' : 'environment';
+    startCamera();
+});
+
+$('imageUpload').addEventListener('change', event => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        setStatus('cameraStatus', 'Please select an image file.', 'error');
+        return;
+    }
+
+    if (file.size > 15 * 1024 * 1024) {
+        setStatus('cameraStatus', 'Image exceeds 15 MB. Choose a smaller image.', 'error');
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => showImage(reader.result);
+    reader.onerror = () => {
+        setStatus('cameraStatus', 'Could not read this image. Try another.', 'error');
+    };
+
+    reader.readAsDataURL(file);
+});
+
+$('searchManual').addEventListener('click', async () => {
+    const query = $('manualSearch').value.trim();
+
+    if (!query) {
+        setStatus('scanStatus', 'Enter a book title or author first.', 'error');
+        return;
+    }
+
+    setStatus('scanStatus', 'Searching SmartLib and Open Library...', 'info');
+
+    $('result').innerHTML = '';
+
+    const local = findLocal(query);
+    const online = await onlineSearch(query);
+
+    $('result').innerHTML =
+        (local ? bookCard(local, 'Catalogue Match') : '') +
+        online.map(book => bookCard(book, 'Online Suggestion')).join('');
+
+    if (!local && !online.length) {
+        $('result').innerHTML =
+            '<div class="status">No matches found. Try another title or author.</div>';
+    }
+
+    setStatus('scanStatus', 'Search complete.');
+});
+
+$('clear').addEventListener('click', () => {
+    scanToken++;
+    stopCamera();
+
+    $('preview').src = '';
+    $('preview').classList.add('hidden');
+    $('placeholder').classList.remove('hidden');
+    $('imageUpload').value = '';
+    $('manualSearch').value = '';
+
+    $('result').innerHTML = `
+        <div class="result-card">
+            <div class="book-icon">📖</div>
+            <div>
+                <h3>Waiting for a cover</h3>
+                <p class="small muted">Book details will appear here.</p>
+            </div>
+        </div>`;
+
+    $('progressWrap').classList.add('hidden');
+
+    setStatus('scanStatus', 'Ready to scan.');
+    setStatus('cameraStatus', 'Scanner reset. Start the camera or upload a photo.');
+});
+
+window.addEventListener('pagehide', stopCamera);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101511">
+<title>Explore Books | SmartLib</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #101511;
+  --panel: #171e19;
+  --panel2: #202a22;
+  --line: #2b382e;
+  --text: #f2f0e7;
+  --muted: #a4afa5;
+  --green: #c6f36b;
+  --gold: #d9b879;
+  --radius: 18px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 85% 0%, #293c261f, transparent 38%),
+    var(--bg);
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+}
+
+a { color: inherit; text-decoration: none; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+.shell {
+  width: min(1440px, 100%);
+  margin: auto;
+  padding: 0 38px;
+}
+
+/* NAVIGATION */
+
+.navbar {
+  min-height: 82px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex-shrink: 0;
+}
+
+.brand-icon {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  border: 1px solid #526449;
+  border-radius: 13px;
+  background: #c6f36b0b;
+}
+
+.brand-icon svg { width: 26px; }
+
+.brand-name {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+}
+
+.brand-name span { color: var(--green); }
+
+.brand-caption {
+  color: var(--muted);
+  font: 9px "DM Mono", monospace;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  list-style: none;
+}
+
+.nav-links a {
+  display: block;
+  padding: 10px 11px;
+  border-radius: 9px;
+  font-size: 12px;
+  color: var(--muted);
+  transition: .2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background: var(--panel2);
+  color: var(--green);
+}
+
+.nav-links a.active::before {
+  content: "↗ ";
+}
+
+.profile-link {
+  display: grid !important;
+  place-items: center;
+  width: 39px;
+  height: 39px;
+  padding: 0 !important;
+  border: 1px solid #526449;
+  border-radius: 50% !important;
+  color: var(--green) !important;
+  background: var(--panel);
+}
+
+/* INTRO */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
+  gap: 25px;
+  align-items: end;
+  padding: 48px 0 32px;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 17px;
+  color: var(--green);
+  font: 10px "DM Mono", monospace;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 25px;
+  height: 1px;
+  background: var(--green);
+}
+
+h1 {
+  font: 500 clamp(42px, 5.5vw, 70px)/1.04 "Playfair Display", serif;
+  letter-spacing: -1.5px;
+}
+
+h1 em {
+  color: var(--green);
+  font-weight: 500;
+}
+
+.hero-description {
+  max-width: 570px;
+  margin-top: 17px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.collection-stat {
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #202b21, #171d18);
+}
+
+.collection-stat::after {
+  content: "✳";
+  position: absolute;
+  top: -15px;
+  right: 10px;
+  color: #c6f36b18;
+  font-size: 100px;
+}
+
+.stat-label {
+  color: var(--muted);
+  font: 10px "DM Mono", monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.stat-number {
+  position: relative;
+  z-index: 1;
+  margin: 9px 0 3px;
+  color: var(--green);
+  font: 38px "Playfair Display", serif;
+}
+
+.stat-description {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* SEARCH AND FILTERS */
+
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 13px 0 18px;
+}
+
+.search-box {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  transition: .2s;
+}
+
+.search-box:focus-within {
+  border-color: #8ab53e;
+  box-shadow: 0 0 0 3px #c6f36b0b;
+}
+
+.search-box svg {
+  width: 19px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.search-box input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.search-box input::placeholder { color: #78847a; }
+
+.result-count {
+  white-space: nowrap;
+  color: var(--muted);
+  font: 10px "DM Mono", monospace;
+}
+
+.filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 29px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter {
+  padding: 9px 13px;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  transition: .2s;
+}
+
+.filter:hover {
+  border-color: #71835f;
+  color: var(--text);
+}
+
+.filter.active {
+  background: var(--green);
+  color: #172016;
+  border-color: var(--green);
+  font-weight: 700;
+}
+
+.sort-select {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  outline: none;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.sort-select option {
+  background: var(--panel);
+  color: var(--text);
+}
+
+/* BOOK COLLECTION */
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 19px;
+}
+
+.section-heading h2 {
+  font: 500 23px "Playfair Display", serif;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font: 9px "DM Mono", monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.book-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(150deg, #1b241d, #151b17 75%);
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+  border-color: #647b53;
+  box-shadow: 0 18px 45px #0005;
+}
+
+.cover-stage {
+  height: 225px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  position: relative;
+  padding: 20px;
+  background:
+    radial-gradient(circle at 50% 45%, #ffffff0d, transparent 60%),
+    #202a22;
+}
+
+.cover-stage::after {
+  content: "";
+  position: absolute;
+  inset: 11px;
+  border: 1px solid #ffffff12;
+  pointer-events: none;
+}
+
+.cover {
+  width: 130px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  padding: 14px 11px;
+  overflow: hidden;
+  border-left: 5px solid #0003;
+  box-shadow: 10px 14px 24px #0006;
+  transform: rotate(-2deg);
+  transition: transform .3s;
+}
+
+.book-card:hover .cover {
+  transform: rotate(0) translateY(-3px);
+}
+
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, #ffffff20, transparent 25%, transparent 75%, #0002);
+  pointer-events: none;
+}
+
+.cover-kicker,
+.cover-title,
+.cover-author {
+  position: relative;
+  z-index: 1;
+}
+
+.cover-kicker {
+  font: 7px "DM Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+}
+
+.cover-title {
+  font: 700 18px/1.04 "Playfair Display", serif;
+  overflow-wrap: anywhere;
+}
+
+.cover-author {
+  font: 8px "DM Mono", monospace;
+  text-transform: uppercase;
+}
+
+.cover-1 { background: #c4e0b4; color: #1b3323; }
+.cover-2 { background: #b7c5de; color: #172744; }
+.cover-3 { background: #c77b4f; color: #fff0d6; }
+.cover-4 { background: #d5b75e; color: #342a13; }
+.cover-5 { background: #b9a6d4; color: #2c2040; }
+.cover-6 { background: #c9c4b3; color: #302f27; }
+.cover-7 { background: #8db9b1; color: #163b36; }
+.cover-8 { background: #d9a7a7; color: #4a2228; }
+
+.book-info { padding: 16px; }
+
+.book-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.category-tag {
+  padding: 5px 7px;
+  border: 1px solid #c6f36b20;
+  border-radius: 5px;
+  background: #c6f36b0c;
+  color: var(--green);
+  font: 8px "DM Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.rating {
+  color: var(--gold);
+  font: 10px "DM Mono", monospace;
+  white-space: nowrap;
+}
+
+.book-title {
+  margin-bottom: 6px;
+  font: 500 20px/1.2 "Playfair Display", serif;
+}
+
+.book-author {
+  min-height: 18px;
+  margin-bottom: 16px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
+}
+
+.available {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #b8cbb0;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.available::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.borrow-btn {
+  padding: 8px 10px;
+  border: 1px solid #526749;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  transition: .2s;
+}
+
+.borrow-btn:hover {
+  background: var(--green);
+  border-color: var(--green);
+  color: #172016;
+}
+
+.borrow-btn.saved {
+  border-color: #c6f36b30;
+  background: #c6f36b14;
+  color: var(--green);
+}
+
+.book-card[hidden] { display: none !important; }
+
+.empty-state {
+  display: none;
+  grid-column: 1 / -1;
+  padding: 55px 20px;
+  border: 1px dashed var(--line);
+  border-radius: 16px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty-state h3 {
+  margin-bottom: 8px;
+  color: var(--text);
+  font: 24px "Playfair Display", serif;
+}
+
+/* READING CONSISTENCY */
+
+.reading-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  margin: 42px 0 55px;
+  padding: 25px 27px;
+  border: 1px solid #3a5036;
+  border-radius: 17px;
+  background: linear-gradient(110deg, #213022, #172019);
+}
+
+.reading-banner::after {
+  content: "READ · REFLECT · REPEAT";
+  position: absolute;
+  right: 20%;
+  color: #c6f36b0a;
+  font: 10px "DM Mono", monospace;
+  letter-spacing: 4px;
+  pointer-events: none;
+}
+
+.reading-copy { position: relative; z-index: 1; }
+
+.reading-label {
+  margin-bottom: 8px;
+  color: var(--green);
+  font: 10px "DM Mono", monospace;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.reading-copy h3 {
+  margin-bottom: 6px;
+  font: 500 24px "Playfair Display", serif;
+}
+
+.reading-copy p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.reading-link {
+  position: relative;
+  z-index: 1;
+  padding: 12px 15px;
+  border-radius: 9px;
+  background: var(--green);
+  color: #182016;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 24px 0 30px;
+  border-top: 1px solid var(--line);
+  color: #829083;
+  font: 9px "DM Mono", monospace;
+  letter-spacing: .5px;
+}
+
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 10;
+  max-width: calc(100vw - 44px);
+  padding: 14px 18px;
+  border-radius: 11px;
+  background: var(--green);
+  color: #172016;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 12px 35px #0006;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: .25s;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 1120px) {
+  .shell { padding: 0 24px; }
+  .book-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .nav-links a { padding: 9px; }
+}
+
+@media (max-width: 850px) {
+  .navbar { flex-wrap: wrap; padding: 15px 0; }
+  .nav-links {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 3px;
+  }
+  .nav-links a { white-space: nowrap; }
+  .hero { grid-template-columns: 1fr; padding-top: 35px; }
+  .collection-stat { display: none; }
+  .book-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .reading-banner { align-items: flex-start; flex-direction: column; }
+  .reading-banner::after { display: none; }
+}
+
+@media (max-width: 480px) {
+  .shell { padding: 0 13px; }
+  .brand-caption { font-size: 8px; }
+  .hero { padding-top: 30px; }
+  .book-grid { gap: 10px; }
+  .cover-stage { height: 165px; padding: 12px; }
+  .cover { width: 99px; height: 138px; padding: 10px 8px; }
+  .cover-title { font-size: 14px; }
+  .cover-kicker { font-size: 6px; }
+  .cover-author { font-size: 7px; }
+  .book-info { padding: 11px; }
+  .book-title { font-size: 17px; }
+  .book-topline { align-items: flex-start; flex-direction: column; }
+  .card-bottom { align-items: stretch; flex-direction: column; }
+  .borrow-btn { width: 100%; }
+  .section-heading p { display: none; }
+  .filter-row { align-items: flex-start; flex-direction: column; }
+  footer { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="shell">
+
+<header class="navbar">
+  <a class="brand" href="dashboard.html" aria-label="SmartLib home">
+    <span class="brand-icon">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M4.5 7.5c4.4-1.8 8.2-.9 11.5 2.1v16c-3.3-3-7.1-3.9-11.5-2.1v-16Z"/>
+        <path d="M27.5 7.5C23.1 5.7 19.3 6.6 16 9.6v16c3.3-3 7.1-3.9 11.5-2.1v-16Z"/>
+        <path d="M8 13c2-.4 3.7 0 5.2 1.1M8 16.5c2-.4 3.7 0 5.2 1.1M24 13c-2-.4-3.7 0-5.2 1.1M24 16.5c-2-.4-3.7 0-5.2 1.1" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <span>
+      <span class="brand-name">smart<span>lib.</span></span>
+      <span class="brand-caption">The knowledge index</span>
+    </span>
+  </a>
+
+  <nav aria-label="Main navigation">
+    <ul class="nav-links">
+      <li><a href="dashboard.html">Overview</a></li>
+      <li><a class="active" href="books.html" aria-current="page">Explore Books</a></li>
+      <li><a href="mybooks.html">My Shelf</a></li>
+      <li><a href="reservation.html">Reservations</a></li>
+      <li><a href="smartboard.html">Smartboard</a></li>
+      <li><a href="Profile.html">Profile</a></li>
+    </ul>
+  </nav>
+
+  <a class="profile-link" href="Profile.html" aria-label="Your profile">CA</a>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Collection / 001 — Discover</div>
+      <h1>Find your next<br><em>great idea.</em></h1>
+      <p class="hero-description">
+        A considered collection for curious minds. Explore timeless thinking,
+        technical craft, and stories that stay with you long after the last page.
+      </p>
+    </div>
+
+    <aside class="collection-stat">
+      <div class="stat-label">Featured collection</div>
+      <div class="stat-number" id="collectionCount">08</div>
+      <div class="stat-description">Curated titles for your next reading session.</div>
+    </aside>
+  </section>
+
+  <section aria-label="Search and filter books">
+    <div class="search-row">
+      <label class="search-box" for="searchInput">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <circle cx="10.8" cy="10.8" r="6.8"/>
+          <path d="m16 16 4.5 4.5" stroke-linecap="round"/>
+        </svg>
+        <input id="searchInput" type="search"
+          placeholder="Search by title, author, or subject…"
+          autocomplete="off">
+      </label>
+      <span class="result-count" id="resultCount">08 TITLES</span>
+    </div>
+
+    <div class="filter-row">
+      <div class="filters" id="filters" aria-label="Filter categories">
+        <button class="filter active" data-category="All" aria-pressed="true">All titles</button>
+        <button class="filter" data-category="Programming" aria-pressed="false">Programming</button>
+        <button class="filter" data-category="Fiction" aria-pressed="false">Fiction</button>
+        <button class="filter" data-category="Science" aria-pressed="false">Science</button>
+        <button class="filter" data-category="Business" aria-pressed="false">Business</button>
+        <button class="filter" data-category="Self Development" aria-pressed="false">Self development</button>
+      </div>
+
+      <select class="sort-select" id="sortSelect" aria-label="Sort books">
+        <option value="featured">Sort: Curated</option>
+        <option value="title">Title: A–Z</option>
+        <option value="author">Author: A–Z</option>
+      </select>
+    </div>
+  </section>
+
+  <section aria-labelledby="collectionHeading">
+    <div class="section-heading">
+      <h2 id="collectionHeading">The featured collection</h2>
+      <p>Selected for curious minds · 2026</p>
+    </div>
+
+    <div class="book-grid" id="bookList">
+
+      <article class="book-card" data-title="Atomic Habits" data-author="James Clear" data-category="Self Development" data-order="1">
+        <div class="cover-stage"><div class="cover cover-1">
+          <span class="cover-kicker">Small changes / big results</span>
+          <span class="cover-title">ATOMIC<br>HABITS</span>
+          <span class="cover-author">James Clear</span>
+        </div></div>
+        <div class="book-info">
+          <div class="book-topline"><span class="category-tag">Self development</span><span class="rating">★ 4.8</span></div>
+          <h3 class="book-title">Atomic Habits</h3>
+          <p class="book-author">James Clear</p>
+          <div class="card-bottom"><span class="available">Available</span><button class="borrow-btn" data-book="Atomic Habits">＋ Add to shelf</button></div>
+        </div>
+      </article>
+
+      <article class="book-card" data-title="Clean Code" data-author="Robert C. Martin" data-category="Programming" data-order="2">
+        <div class="cover-stage"><div class="cover cover-2">
+          <span class="cover-kicker">The craft of software</span>
+          <span class="cover-title">CLEAN<br>CODE</span>
+          <span class="cover-author">Robert C. Martin</span>
+        </div></div>
+        <div class="book-info">
+          <div class="book-topline"><span class="category-tag">Programming</span><span class="rating">★ 4.7</span></div>
+          <h3 class="book-title">Clean Code</h3>
+          <p class="book-author">Robert C. Martin</p>
+          <div class="card-bottom"><span class="available">Available</span><button class="borrow-btn" data-book="Clean Code">＋ Add to shelf</button></div>
+        </div>
+      </article>
+
+      <article class="book-card" data-title="The Alchemist" data-author="Paulo Coelho" data-category="Fiction" data-order="3">
+        <div class="cover-stage"><div class="cover cover-3">
+          <span class="cover-kicker">A fable about following dreams</span>
+          <span class="cover-title">THE<br>ALCHEMIST</span>
+          <span class="cover-author">Paulo Coelho</span>
+        </div></div>
+        <div class="book-info">
+          <div class="book-topline"><span class="category-tag">Fiction</span><span class="rating">★ 4.6</span></div>
+          <h3 class="book-title">The Alchemist</h3>
+          <p class="book-author">Paulo Coelho</p>
+          <div class="card-bottom"><span class="available">Available</span><button class="borrow-btn" data-book="The Alchemist">＋ Add to shelf</button></div>
+        </div>
+      </article>
+
+      <article class="book-card" data-title="Python Crash Course" data-author="Eric Matthes" data-category="Programming" data-order="4">
+        <div class="cover-stage"><div class="cover cover-4">
+          <span class="cover-kicker">Learn by building</span>
+          <span class="cover-title">PYTHON<br>CRASH<br>COURSE</span>
+          <span class="cover-author">Eric Matthes</span>
+        </div></div>
+        <div class="book-info">
+          <div class="book-topline"><span class="category-tag">Programming</span><span class="rating">★ 4.8</span></div>
+          <h3 class="book-title">Python Crash Course</h3>
+          <p class="book-author">Eric Matthes</p>
+          <div class="card-bottom"><span class="available">Available</span><button class="borrow-btn" data-book="Python Crash Course">＋ Add to shelf</button></div>
+        </div>
+      </article>
+
+      <article class="book-card" data-title="Think and Grow Rich" data-author="Napoleon Hill" data-category="Business" data-order="5">
+        <div class="cover-stage"><div class="cover cover-5">
+          <span class="cover-kicker">A classic of achievement</span>
+          <span class="cover-title">THINK<br>& GROW<br>RICH</span>
+          <span class="cover-author">Napoleon Hill</span>
+        </div></div>
+        <div class="book-info">
+          <div class="book-topline"><span class="category-tag">Business</span><span class="rating">★ 4.5</span></div>
+          <h3 class="book-title">Think and Grow Rich</h3>
+          <p class="book-author">Napoleon Hill</p>
+          <div class="card-bottom"><span class="available">Available</span><button class="borrow-btn" data-book="Think and Grow Rich">＋ Add to shelf</button></div>
+        </div>
+      </article>
+
+      <article class="book-card" data-title="The Power of Now" data-author="Eckhart Tolle" data-category="Self Development" data-order="6">
+        <div class="cover-stage"><div class="cover cover-6">
+          <span class="cover-kicker">A guide to presence</span>
+          <span class="cover-title">THE<br>POWER<br>OF NOW</span>
+          <span class="cover-author">Eckhart Tolle</span>
+        </div></div>
+        <div class="book-info">
+          <div class="book-topline"><span class="category-tag">Self development</span><span class="rating">★ 4.6</span></div>
+          <h3 class="book-title">The Power of Now</h3>
+          <p class="book-author">Eckhart Tolle</p>
+          <div class="card-bottom"><span class="available">Available</span><button class="borrow-btn" data-book="The Power of Now">＋ Add to shelf</button></div>
+        </div>
+      </article>
+
+      <article class="book-card" data-title="A Brief History of Time" data-author="Stephen Hawking" data-category="Science" data-order="7">
+        <div class="cover-stage"><div class="cover cover-7">
+          <span class="cover-kicker">Cosmos / space / time</span>
+          <span class="cover-title">A BRIEF<br>HISTORY<br>OF TIME</span>
+          <span class="cover-author">Stephen Hawking</span>
+        </div></div>
+        <div class="book-info">
+          <div class="book-topline"><span class="category-tag">Science</span><span class="rating">★ 4.7</span></div>
+          <h3 class="book-title">A Brief History of Time</h3>
+          <p class="book-author">Stephen Hawking</p>
+          <div class="card-bottom"><span class="available">Available</span><button class="borrow-btn" data-book="A Brief History of Time">＋ Add to shelf</button></div>
+        </div>
+      </article>
+
+      <article class="book-card" data-title="The Design of Everyday Things" data-author="Don Norman" data-category="Science" data-order="8">
+        <div class="cover-stage"><div class="cover cover-8">
+          <span class="cover-kicker">Design for everyday life</span>
+          <span class="cover-title">THE DESIGN<br>OF EVERYDAY<br>THINGS</span>
+          <span class="cover-author">Don Norman</span>
+        </div></div>
+        <div class="book-info">
+          <div class="book-topline"><span class="category-tag">Science & design</span><span class="rating">★ 4.5</span></div>
+          <h3 class="book-title">The Design of Everyday Things</h3>
+          <p class="book-author">Don Norman</p>
+          <div class="card-bottom"><span class="available">Available</span><button class="borrow-btn" data-book="The Design of Everyday Things">＋ Add to shelf</button></div>
+        </div>
+      </article>
+
+      <div class="empty-state" id="emptyState">
+        <h3>No matching titles</h3>
+        Try another title, author, or category.
+      </div>
+    </div>
+  </section>
+
+  <section class="reading-banner">
+    <div class="reading-copy">
+      <div class="reading-label">A little every day</div>
+      <h3>Build a reading ritual.</h3>
+      <p>Small reading sessions add up. Keep your streak alive and make room for one more page today.</p>
+    </div>
+    <a class="reading-link" href="dashboard.html">Track my reading ↗</a>
+  </section>
+</main>
+
+<footer>
+  <span>© 2026 SMARTLIB / THE KNOWLEDGE INDEX</span>
+  <span>READ WIDELY. THINK DEEPLY.</span>
+</footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const searchInput = document.getElementById("searchInput");
+  const cards = [...document.querySelectorAll(".book-card")];
+  const filters = [...document.querySelectorAll(".filter")];
+  const sortSelect = document.getElementById("sortSelect");
+  const resultCount = document.getElementById("resultCount");
+  const emptyState = document.getElementById("emptyState");
+  const bookList = document.getElementById("bookList");
+  const toast = document.getElementById("toast");
+
+  let activeCategory = "All";
+  let toastTimer;
+
+  function readBorrowedBooks() {
+    try {
+      const saved = JSON.parse(localStorage.getItem("borrowedBooks") || "[]");
+      return Array.isArray(saved) ? saved : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2800);
+  }
+
+  function updateShelfButtons() {
+    const savedBooks = readBorrowedBooks();
+
+    document.querySelectorAll("[data-book]").forEach(button => {
+      const saved = savedBooks.includes(button.dataset.book);
+      button.classList.toggle("saved", saved);
+      button.textContent = saved ? "✓ On your shelf" : "＋ Add to shelf";
+      button.setAttribute("aria-pressed", String(saved));
+    });
+  }
+
+  function renderBooks() {
+    const query = searchInput.value.trim().toLowerCase();
+
+    let visibleCards = cards.filter(card => {
+      const searchableText = (
+        card.dataset.title + " " +
+        card.dataset.author + " " +
+        card.dataset.category
+      ).toLowerCase();
+
+      const matchesQuery = searchableText.includes(query);
+      const matchesCategory =
+        activeCategory === "All" ||
+        card.dataset.category === activeCategory;
+
+      return matchesQuery && matchesCategory;
+    });
+
+    if (sortSelect.value === "title") {
+      visibleCards.sort((a, b) =>
+        a.dataset.title.localeCompare(b.dataset.title)
+      );
+    } else if (sortSelect.value === "author") {
+      visibleCards.sort((a, b) =>
+        a.dataset.author.localeCompare(b.dataset.author)
+      );
+    } else {
+      visibleCards.sort((a, b) =>
+        Number(a.dataset.order) - Number(b.dataset.order)
+      );
+    }
+
+    cards.forEach(card => {
+      card.hidden = !visibleCards.includes(card);
+    });
+
+    visibleCards.forEach(card => bookList.insertBefore(card, emptyState));
+
+    emptyState.style.display = visibleCards.length ? "none" : "block";
+
+    resultCount.textContent =
+      String(visibleCards.length).padStart(2, "0") +
+      (visibleCards.length === 1 ? " TITLE" : " TITLES");
+  }
+
+  searchInput.addEventListener("input", renderBooks);
+  sortSelect.addEventListener("change", renderBooks);
+
+  filters.forEach(button => {
+    button.addEventListener("click", () => {
+      activeCategory = button.dataset.category;
+
+      filters.forEach(filter => {
+        const selected = filter === button;
+        filter.classList.toggle("active", selected);
+        filter.setAttribute("aria-pressed", String(selected));
+      });
+
+      renderBooks();
+    });
+  });
+
+  document.querySelectorAll("[data-book]").forEach(button => {
+    button.addEventListener("click", () => {
+      const bookName = button.dataset.book;
+      const savedBooks = readBorrowedBooks();
+
+      if (savedBooks.includes(bookName)) {
+        showToast("This book is already on your shelf.");
+        return;
+      }
+
+      savedBooks.push(bookName);
+
+      try {
+        localStorage.setItem("borrowedBooks", JSON.stringify(savedBooks));
+        updateShelfButtons();
+        showToast("✓ " + bookName + " added to My Shelf.");
+      } catch {
+        showToast("Unable to save. Please check your browser storage.");
+      }
+    });
+  });
+
+  updateShelfButtons();
+  renderBooks();
+})();
+</script>
+</body>
+</html>

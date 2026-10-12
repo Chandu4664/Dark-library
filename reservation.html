@@ -1,0 +1,724 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reservations | SmartLib</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #101511;
+    --panel: #171e19;
+    --panel-light: #1d2720;
+    --border: #303b31;
+    --lime: #c6f36b;
+    --text: #f1f2e9;
+    --muted: #9ba69a;
+    --danger: #ff827b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.navbar {
+    min-height: 76px;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    background: #101511;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--lime);
+}
+
+.logo small {
+    display: block;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    margin-top: 3px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--lime);
+}
+
+.nav-links .logout {
+    color: var(--danger);
+    border: 1px solid #593632;
+    padding: 9px 14px;
+    border-radius: 7px;
+}
+
+main {
+    max-width: 1250px;
+    margin: auto;
+    padding: 45px 7% 70px;
+}
+
+.eyebrow {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 13px;
+}
+
+.page-heading {
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(34px, 5vw, 46px);
+    font-weight: 600;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.reservation-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 23px;
+    align-items: start;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 27px;
+}
+
+.panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 26px;
+}
+
+.heading-icon {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    background: #283922;
+    border: 1px solid #435536;
+    border-radius: 11px;
+    font-size: 25px;
+}
+
+.panel-heading h2,
+.reservations-heading h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 23px;
+    margin-bottom: 6px;
+}
+
+.panel-heading p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.section-label {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 21px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.form-group select,
+.form-group input {
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 13px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+    border-color: var(--lime);
+}
+
+.form-group option {
+    background: var(--panel);
+    color: var(--text);
+}
+
+.hint {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.reserve-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: var(--lime);
+    color: #172013;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.reserve-btn:hover {
+    background: #d7ff8a;
+}
+
+.reservations-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.reservation-count {
+    font-family: 'DM Mono', monospace;
+    color: var(--lime);
+    background: #26351f;
+    border: 1px solid #435536;
+    padding: 7px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+}
+
+.reservation-card {
+    background: var(--panel-light);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--lime);
+    border-radius: 10px;
+    padding: 19px;
+    margin-bottom: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.reservation-info {
+    min-width: 0;
+}
+
+.reservation-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    margin-bottom: 12px;
+    overflow-wrap: anywhere;
+}
+
+.reservation-info p {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 7px 0;
+    line-height: 1.6;
+}
+
+.reservation-status {
+    display: inline-block;
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+}
+
+.cancel-btn {
+    flex-shrink: 0;
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid #653a36;
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.cancel-btn:hover {
+    background: #38211f;
+}
+
+.empty {
+    text-align: center;
+    background: var(--panel-light);
+    border: 1px dashed #465344;
+    border-radius: 11px;
+    padding: 38px 20px;
+}
+
+.empty-icon {
+    font-size: 40px;
+    margin-bottom: 13px;
+}
+
+.empty h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    margin-bottom: 10px;
+}
+
+.empty p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.message {
+    display: none;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.message.show {
+    display: block;
+}
+
+.message.error {
+    color: var(--danger);
+    background: #38211f;
+    border: 1px solid #653a36;
+}
+
+.message.success {
+    color: var(--lime);
+    background: #26351f;
+    border: 1px solid #435536;
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+footer span {
+    color: var(--lime);
+    font-family: 'DM Mono', monospace;
+}
+
+@media (max-width: 950px) {
+    .reservation-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 16px 5%;
+    }
+
+    .nav-links {
+        gap: 13px;
+    }
+
+    .nav-links a {
+        font-size: 12px;
+    }
+
+    main {
+        padding: 35px 5% 50px;
+    }
+
+    .panel {
+        padding: 20px;
+    }
+
+    .reservation-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .cancel-btn {
+        width: 100%;
+    }
+
+    footer {
+        padding: 22px 5%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a class="logo" href="dashboard.html">
+        Smart<span>Lib</span>
+        <small>YOUR DIGITAL LIBRARY</small>
+    </a>
+
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="books.html">Explore Books</a>
+        <a href="mybooks.html">My Shelf</a>
+        <a href="reservation.html" class="active">Reservations</a>
+        <a href="smartboard.html">Smartboard</a>
+        <a href="profile.html">Profile</a>
+        <a href="index.html" class="logout">Log out ↗</a>
+    </div>
+</nav>
+
+<main>
+    <div class="page-heading">
+        <p class="eyebrow">Library services / 02</p>
+        <h1>Reservations<span style="color:var(--lime)">.</span></h1>
+        <p class="subtitle">
+            Plan your next read. Reserve a book and manage your requests.
+        </p>
+    </div>
+
+    <section class="reservation-layout">
+
+        <div class="panel">
+            <div class="panel-heading">
+                <div class="heading-icon">🔖</div>
+                <div>
+                    <h2>Reserve a Book</h2>
+                    <p>Choose a title and your preferred date.</p>
+                </div>
+            </div>
+
+            <p class="section-label">01 / RESERVATION DETAILS</p>
+
+            <div id="formMessage" class="message" role="status" aria-live="polite"></div>
+
+            <form id="reservationForm">
+                <div class="form-group">
+                    <label for="bookSelect">Select Book</label>
+                    <select id="bookSelect" required>
+                        <option value="">-- Select a Book --</option>
+                        <option value="Atomic Habits">Atomic Habits</option>
+                        <option value="Clean Code">Clean Code</option>
+                        <option value="The Alchemist">The Alchemist</option>
+                        <option value="Python Crash Course">Python Crash Course</option>
+                        <option value="Think and Grow Rich">Think and Grow Rich</option>
+                        <option value="The Power of Now">The Power of Now</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="reservationDate">Reservation Date</label>
+                    <input type="date" id="reservationDate" required>
+                    <p class="hint">Choose today or a future date.</p>
+                </div>
+
+                <button class="reserve-btn" type="submit">
+                    🔖 Confirm Reservation
+                </button>
+            </form>
+        </div>
+
+        <div class="panel">
+            <div class="reservations-heading">
+                <div>
+                    <p class="section-label">02 / YOUR REQUESTS</p>
+                    <h2>My Reservations</h2>
+                </div>
+                <span class="reservation-count" id="reservationCount">0 RESERVED</span>
+            </div>
+
+            <div id="reservationList"></div>
+        </div>
+
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 SmartLib · Smart Library Management System</p>
+    <span>READ. LEARN. GROW.</span>
+</footer>
+
+<script>
+const BOOKS = [
+    "Atomic Habits",
+    "Clean Code",
+    "The Alchemist",
+    "Python Crash Course",
+    "Think and Grow Rich",
+    "The Power of Now"
+];
+
+const bookSelect = document.getElementById("bookSelect");
+const dateInput = document.getElementById("reservationDate");
+const form = document.getElementById("reservationForm");
+const list = document.getElementById("reservationList");
+const count = document.getElementById("reservationCount");
+const message = document.getElementById("formMessage");
+
+// Prevent choosing a date before today.
+const today = new Date();
+const localToday = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0")
+].join("-");
+
+dateInput.min = localToday;
+
+function getReservations() {
+    try {
+        const data = JSON.parse(localStorage.getItem("reservations") || "[]");
+        return Array.isArray(data) ? data : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveReservations(reservations) {
+    localStorage.setItem("reservations", JSON.stringify(reservations));
+}
+
+function showMessage(text, type) {
+    message.textContent = text;
+    message.className = "message show " + type;
+}
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+function formatDate(dateString) {
+    // Keep date parsing independent of browser timezone.
+    const parts = dateString.split("-").map(Number);
+    if (parts.length !== 3 || parts.some(Number.isNaN)) {
+        return dateString;
+    }
+
+    const date = new Date(parts[0], parts[1] - 1, parts[2]);
+    return date.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+}
+
+function loadReservations() {
+    const reservations = getReservations();
+
+    count.textContent =
+        reservations.length + (reservations.length === 1 ? " RESERVED" : " RESERVED");
+
+    list.innerHTML = "";
+
+    if (reservations.length === 0) {
+        list.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">🔖</div>
+                <h3>No Reservations Yet</h3>
+                <p>Your reserved books will appear here after you submit the form.</p>
+            </div>
+        `;
+        return;
+    }
+
+    reservations.forEach((reservation, index) => {
+        if (!reservation || typeof reservation.book !== "string") return;
+
+        const card = document.createElement("article");
+        card.className = "reservation-card";
+
+        const info = document.createElement("div");
+        info.className = "reservation-info";
+
+        const title = document.createElement("h3");
+        title.textContent = "📚 " + reservation.book;
+
+        const date = document.createElement("p");
+        date.textContent = "📅 Reservation date: " +
+            (reservation.date ? formatDate(reservation.date) : "Not specified");
+
+        const status = document.createElement("p");
+        status.className = "reservation-status";
+        status.textContent = "● RESERVED";
+
+        const cancel = document.createElement("button");
+        cancel.className = "cancel-btn";
+        cancel.type = "button";
+        cancel.textContent = "Cancel";
+        cancel.addEventListener("click", () => cancelReservation(index));
+
+        info.append(title, date, status);
+        card.append(info, cancel);
+        list.appendChild(card);
+    });
+}
+
+function reserveBook(event) {
+    event.preventDefault();
+
+    const book = bookSelect.value;
+    const date = dateInput.value;
+
+    if (!BOOKS.includes(book)) {
+        showMessage("Please select a book from the list.", "error");
+        return;
+    }
+
+    if (!date) {
+        showMessage("Please select a reservation date.", "error");
+        return;
+    }
+
+    if (date < localToday) {
+        showMessage("Please choose today or a future date.", "error");
+        return;
+    }
+
+    const reservations = getReservations();
+
+    const alreadyReserved = reservations.some(
+        reservation => reservation && reservation.book === book
+    );
+
+    if (alreadyReserved) {
+        showMessage("You already have a reservation for this book. Cancel it first if you want to change the date.", "error");
+        return;
+    }
+
+    reservations.push({
+        book: book,
+        date: date
+    });
+
+    saveReservations(reservations);
+    form.reset();
+    dateInput.min = localToday;
+
+    showMessage(book + " has been reserved successfully.", "success");
+    loadReservations();
+}
+
+function cancelReservation(index) {
+    const reservations = getReservations();
+    const reservation = reservations[index];
+
+    if (!reservation) {
+        loadReservations();
+        return;
+    }
+
+    const confirmed = confirm(
+        'Cancel the reservation for "' + reservation.book + '"?'
+    );
+
+    if (!confirmed) return;
+
+    reservations.splice(index, 1);
+    saveReservations(reservations);
+
+    showMessage("Reservation cancelled successfully.", "success");
+    loadReservations();
+}
+
+form.addEventListener("submit", reserveBook);
+
+window.addEventListener("storage", event => {
+    if (event.key === "reservations") {
+        loadReservations();
+    }
+});
+
+loadReservations();
+</script>
+
+</body>
+</html>
